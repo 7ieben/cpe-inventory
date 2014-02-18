@@ -8,13 +8,8 @@ import Data.Maybe (catMaybes)
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure)
 import System.IO
-import Text.Printf (printf)
-
--------------------------------------------------------------------
 
 type CPEList = [CPERecord]
-
--------------------------------------------------------------------
 
 main :: IO ()
 main = do
