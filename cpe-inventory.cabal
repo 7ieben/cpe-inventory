@@ -1,0 +1,23 @@
+name:                cpe-inventory
+version:             0.1.0.0
+--synopsis:            
+description:         A System-Inventory-Tool for Arch Linux written in Haskell        
+license:             PublicDomain          
+license-file:        LICENSE
+author:              Steven Kutsch
+maintainer:          kutsch.steven@gmail.com
+-- copyright:           
+category:            System
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+executable cpe-inventory
+  main-is:             Main.hs            
+  -- other-modules:       
+  -- other-extensions:    
+  build-depends:       base >=4.6 && <4.7,
+                       cpe-parse >= 0.2.0.1,
+                       process
+  hs-source-dirs:      src/
+  default-language:    Haskell2010
