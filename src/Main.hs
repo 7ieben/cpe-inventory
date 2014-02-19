@@ -25,7 +25,7 @@ main = do
   (_, Just hout, _, _) <- 
       createProcess (proc "pacman" ["-Q"]) { std_out = CreatePipe }
   systemInventory <- hGetContents hout
-  let installed = (map head . map words . lines) systemInventory
+  let installed = (map words . lines) systemInventory
       found = catMaybes $ map (compareCPE installed) cpes
       
   mapM_ putStrLn found
@@ -33,7 +33,7 @@ main = do
 fileToCPEList :: String -> CPEList
 fileToCPEList file = map read $ lines file
 
-compareCPE ::  [String] -> CPERecord -> Maybe String
-compareCPE s cpe = if (product cpe) `elem` s 
-                   then Just (product cpe)
+compareCPE ::  [[String]] -> CPERecord -> Maybe String
+compareCPE ss cpe = if [(product cpe), (version cpe)] `elem` ss
+                   then Just $ unwords [(product cpe), (version cpe)]
                    else Nothing
