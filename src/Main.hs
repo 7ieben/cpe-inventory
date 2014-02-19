@@ -1,13 +1,13 @@
 module Main where
 
-import Prelude hiding (product)
+import Control.Monad (when, mapM_)
 import Data.CPE
-import System.Process
-import Control.Monad (when)
+import Prelude hiding (product)
 import Data.Maybe (catMaybes)
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure)
-import System.IO
+import System.IO (hGetContents)
+import System.Process (StdStream(CreatePipe), proc, createProcess, std_out)
 
 type CPEList = [CPERecord]
 
@@ -22,7 +22,7 @@ main = do
   
   content <- readFile (head args)
   let cpes = fileToCPEList content 
-  (_, Just hout, _, p) <- 
+  (_, Just hout, _, _) <- 
       createProcess (proc "pacman" ["-Q"]) { std_out = CreatePipe }
   systemInventory <- hGetContents hout
   let installed = (map head . map words . lines) systemInventory
