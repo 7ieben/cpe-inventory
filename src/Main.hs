@@ -2,8 +2,8 @@ module Main where
 
 import Control.Monad (when, mapM_)
 import Data.CPE
-import Prelude hiding (product)
 import Data.Maybe (catMaybes)
+import Prelude hiding (product)
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure)
 import System.IO (hGetContents)
