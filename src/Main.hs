@@ -7,7 +7,7 @@ import Prelude hiding (product)
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure)
 import System.IO (hGetContents)
-import System.Process (StdStream(CreatePipe), proc, createProcess, std_out)
+import System.Process (StdStream(CreatePipe), proc, createProcess, std_out, waitForProcess)
 
 type CPEList = [CPERecord]
 
@@ -22,8 +22,9 @@ main = do
   
   content <- readFile (head args)
   let cpes = fileToCPEList content 
-  (_, Just hout, _, _) <- 
+  (_, Just hout, _, p) <- 
       createProcess (proc "pacman" ["-Q"]) { std_out = CreatePipe }
+  waitForProcess p
   systemInventory <- hGetContents hout
   let installed = (map words . lines) systemInventory
       found = mapMaybe (compareCPE installed) cpes
