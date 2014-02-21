@@ -34,7 +34,11 @@ main = do
 fileToCPEList :: String -> CPEList
 fileToCPEList file = map read $ lines file
 
-compareCPE ::  [[String]] -> CPERecord -> Maybe String
-compareCPE ss cpe = if [product cpe, version cpe] `elem` ss
-                   then Just $ unwords [product cpe, version cpe]
-                   else Nothing
+compareCPE :: [[String]] -> CPERecord -> Maybe String
+compareCPE ss cpe = case version cpe of
+                      "" -> if product cpe `elem` map head ss
+                            then Just $ product cpe
+                            else Nothing
+                      _ -> if [product cpe, version cpe] `elem` ss
+                           then Just $ unwords [product cpe, version cpe]
+                           else Nothing
