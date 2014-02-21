@@ -6,3 +6,4 @@ cabal.sandbox.config
 *.chi
 *.chs.h
 .virthualenv
+cpefile
