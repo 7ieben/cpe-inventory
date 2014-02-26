@@ -26,8 +26,8 @@ main = do
   cpes <- fileToCPEList =<< readFile (head args)
   mapM_ putStrLn $ mapMaybe (matchCPE pout) cpes
  where
-   matchCPE = \s -> compareCPE $ installed s
-   installed = (map words . lines)
+   matchCPE s = compareCPE $ installed s
+   installed = map words . lines
   
 fileToCPEList :: String -> IO CPEList
 fileToCPEList file = return $ map read $ lines file
