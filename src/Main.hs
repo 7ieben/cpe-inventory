@@ -14,25 +14,21 @@ type CPEList = [CPERecord]
 main :: IO ()
 main = do
   args <- getArgs
-          
   when (length args /= 1) $ do
          prog <- getProgName
          putStrLn $ "Syntax: " ++ prog ++ " CPEFILE"
          exitFailure
   
-  content <- readFile (head args)
-  let cpes = fileToCPEList content 
-  (_, Just hout, _, p) <- 
-      createProcess (proc "pacman" ["-Q"]) { std_out = CreatePipe }
+  cpes <- fileToCPEList =<< readFile (head args) 
+  (_, Just hout, _, p) <- createProcess (proc "pacman" ["-Q"]) { std_out = CreatePipe }
   waitForProcess p
-  systemInventory <- hGetContents hout
-  let installed = (map words . lines) systemInventory
-      found = mapMaybe (compareCPE installed) cpes
-      
-  mapM_ putStrLn found
+  pout <- hGetContents hout
+    
+  mapM_ putStrLn $ mapMaybe (compareCPE ((map words . lines) pout)) cpes
+
   
-fileToCPEList :: String -> CPEList
-fileToCPEList file = map read $ lines file
+fileToCPEList :: String -> IO CPEList
+fileToCPEList file = return $ map read $ lines file
 
 compareCPE :: [[String]] -> CPERecord -> Maybe String
 compareCPE ss cpe = case version cpe of
