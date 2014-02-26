@@ -17,15 +17,17 @@ main = do
   when (length args /= 1) $ do
          prog <- getProgName
          putStrLn $ "Syntax: " ++ prog ++ " CPEFILE"
-         exitFailure
+         exitFailure 
   
-  cpes <- fileToCPEList =<< readFile (head args) 
   (_, Just hout, _, p) <- createProcess (proc "pacman" ["-Q"]) { std_out = CreatePipe }
   waitForProcess p
   pout <- hGetContents hout
-    
-  mapM_ putStrLn $ mapMaybe (compareCPE ((map words . lines) pout)) cpes
-
+  
+  cpes <- fileToCPEList =<< readFile (head args)
+  mapM_ putStrLn $ mapMaybe (matchCPE pout) cpes
+ where
+   matchCPE = \s -> compareCPE $ installed s
+   installed = (map words . lines)
   
 fileToCPEList :: String -> IO CPEList
 fileToCPEList file = return $ map read $ lines file
