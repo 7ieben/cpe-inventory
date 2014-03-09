@@ -7,3 +7,4 @@ cabal.sandbox.config
 *.chs.h
 .virthualenv
 cpefile
+/src/#Main.hs#
