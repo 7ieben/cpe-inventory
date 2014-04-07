@@ -35,7 +35,7 @@ fileToCPEList file = return $ map read $ lines file
 cpeListToString :: CPEList -> String
 cpeListToString = unlines . map show
 
-Comparecpe :: [[String]] -> CPERecord -> Maybe String
+compareCPE :: [[String]] -> CPERecord -> Maybe String
 compareCPE ss cpe = case version cpe of
                       "" -> if product cpe `elem` map head ss
                             then Just $ product cpe
